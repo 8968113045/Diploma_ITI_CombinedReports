@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "DTEITI-Reports", "DTEITI-Reports\DTEITI-Reports.rptproj", "{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		DebugLocal|Default = DebugLocal|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.Debug|Default.ActiveCfg = Debug
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.Debug|Default.Build.0 = Debug
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.Debug|Default.Deploy.0 = Debug
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.DebugLocal|Default.ActiveCfg = DebugLocal
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.DebugLocal|Default.Build.0 = DebugLocal
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.Release|Default.ActiveCfg = Release
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.Release|Default.Build.0 = Release
+		{B0E7A341-52CF-4AF0-8247-DBFC06772AB6}.Release|Default.Deploy.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
