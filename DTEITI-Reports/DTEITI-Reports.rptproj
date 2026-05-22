@@ -47,13 +47,19 @@
     <Reports>@(Report)</Reports>
   </PropertyGroup>
   <ItemGroup>
+    <DataSource Include="DataSourceDiploma.rds" />
     <DataSource Include="itiFirst.rds" />
   </ItemGroup>
   <ItemGroup>
     <Report Include="AdmissionDetail.rdl" />
     <Report Include="InstituteWiseSeatReport.rdl" />
+    <Report Include="ITICutOffRankRpt.rdl" />
+    <Report Include="RptITIPivotSeatMatrix.rdl" />
     <Report Include="RptRankVerificationReport2021.rdl" />
+    <Report Include="RptRankVerificationReportPsbte.rdl" />
+    <Report Include="RptRegCandNotAllottedPsbte.rdl" />
     <Report Include="RptRegCandNotAllotted_2021.rdl" />
+    <Report Include="RptSeatAllotementRankwisePsbte.rdl" />
     <Report Include="RptSeatAllotementRankwise_new.rdl" />
     <Report Include="RptSeatAllotment2ndCounselling_2021.rdl" />
     <Report Include="RptSeatAllotment3rdCounselling.rdl" />

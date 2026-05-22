@@ -3,7 +3,6 @@
   <ConnectionProperties>
     <Extension>SQL</Extension>
     <ConnectString>Data Source=E-NIGAM01;Initial Catalog=itiFirst</ConnectString>
-    <Prompt>Specify a user name and password for data source DataSourceITI:</Prompt>
   </ConnectionProperties>
   <DataSourceID>edc69644-2328-4ac9-8297-6d068863a8c4</DataSourceID>
 </RptDataSource>
