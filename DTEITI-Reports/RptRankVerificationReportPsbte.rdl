@@ -7,9 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.4.33213.308</am:Version>
+      <am:Version>18.5.11723.231</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-05-22T09:03:06.4254180Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-05-23T13:21:59.4300115Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -18,11 +18,16 @@
       <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>7d1f3ba9-4d57-4dcf-8c60-b1c5d06baa18</rd:DataSourceID>
     </DataSource>
+    <DataSource Name="DataSource1">
+      <DataSourceReference>DataSourceDiploma</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>4222026e-f895-44cb-87b2-c4fc393b9b3d</rd:DataSourceID>
+    </DataSource>
   </DataSources>
   <DataSets>
     <DataSet Name="DataSet1">
       <Query>
-        <DataSourceName>PSBTECOUNS</DataSourceName>
+        <DataSourceName>DataSource1</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@streamid">
             <Value>=Parameters!streamId.Value</Value>
@@ -120,7 +125,7 @@ order by B.rank</CommandText>
         </Field>
         <Field Name="percentageMarks">
           <DataField>percentageMarks</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Stream">
           <DataField>Stream</DataField>

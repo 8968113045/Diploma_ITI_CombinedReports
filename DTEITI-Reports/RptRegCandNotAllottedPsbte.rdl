@@ -7,9 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.4.33213.308</am:Version>
+      <am:Version>18.5.11723.231</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-05-13T04:04:55.6200911Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-05-23T13:22:26.5251251Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -52,13 +52,13 @@
 
                 FROM App_Choice CC
 
-                LEFT JOIN MD_Institute IM
-                    ON IM.id = CC.instituteId  and IM.Stream_Code=@streamid
+                INNER JOIN MD_Institute IM
+                    ON IM.id = CC.instituteId AND CC.boardId = IM.boardId and IM.Stream_Code=@streamid
 
-                LEFT JOIN MD_Program M
-                    ON M.id = CC.programId  and M.Stream_Code=@streamid
+                INNER JOIN MD_Program M
+                    ON M.id = CC.programId AND CC.boardId = M.boardId  and M.Stream_Code=@streamid
 
-                WHERE cc.rollNo = a.rollNo
+                WHERE cc.rollNo = a.rollNo AND a.boardId = cc.boardId
                   AND cc.optNo &lt;= 5
 
                 FOR XML PATH('')
@@ -74,24 +74,24 @@
 FROM app_candidateprofile a
 
 INNER JOIN MD_Gender MG ON
-    a.genderId = MG.id
+    a.genderId = MG.id AND a.boardId = MG.boardId
 
 INNER JOIN MD_Category
-    ON a.categoryId = MD_Category.id
+    ON a.categoryId = MD_Category.id AND a.boardId = MD_Category.boardId
 
 INNER JOIN MD_Domicile
-    ON a.domicileId = MD_Domicile.id
+    ON a.domicileId = MD_Domicile.id AND a.boardId = MD_Domicile.boardId
 
 INNER JOIN app_rankdetail Ar
     ON a.rollno = ar.rollno
-   AND ar.streamId = @streamid
+   AND ar.streamId = @streamid AND a.boardId = Ar.boardId
 
 WHERE a.rollNo NOT IN
 (
     SELECT rollNo
     FROM App_Allotment
     WHERE roundNo = @csno
-      AND streamId = @streamid
+      AND streamId = @streamid AND boardId = a.boardId
 )
 
 AND a.rollNo IN
@@ -140,9 +140,8 @@ ORDER BY ar.rank</CommandText>
     <DataSet Name="DataSet2">
       <Query>
         <DataSourceName>DataSource</DataSourceName>
-        <CommandText>
-SELECT id,description 
-FROM MD_Stream</CommandText>
+        <CommandText>SELECT id,description 
+FROM MD_Stream WHERE examTypeId = 53;</CommandText>
       </Query>
       <Fields>
         <Field Name="id">

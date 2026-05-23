@@ -7,9 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>17.4.33213.308</am:Version>
+      <am:Version>18.5.11723.231</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-05-13T04:05:24.0504571Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-05-23T13:22:43.3533399Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -17,6 +17,11 @@
       <DataSourceReference>DataSourceDiploma</DataSourceReference>
       <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>bd4ff777-4690-4d69-98a6-9ae2b5c3633a</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="DataSource1">
+      <DataSourceReference>DataSourceDiploma</DataSourceReference>
+      <rd:SecurityType>None</rd:SecurityType>
+      <rd:DataSourceID>eafc36fe-9d73-44d0-a8ab-1e8732b3ce71</rd:DataSourceID>
     </DataSource>
   </DataSources>
   <DataSets>
@@ -31,7 +36,8 @@
             <Value>=Parameters!csno.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT  DISTINCT
+        <CommandText>
+SELECT  DISTINCT
 REPLACE(
     STUFF(
         (
@@ -40,12 +46,11 @@ REPLACE(
                 + '-' + ISNULL(IM.description, '')
                 + '-' + ISNULL(M.description, '')
             FROM App_Choice AS CC
-            LEFT JOIN MD_Institute IM 
-                ON IM.id = CC.instituteId and IM.Stream_Code=@streamid
-            LEFT JOIN MD_Program M 
-                ON M.id = CC.programId and M.Stream_Code=@streamid
-            WHERE cc.rollNo = aa.rollNo 
-              AND cc.optNo &lt;= 5
+            INNER JOIN MD_Institute IM 
+                ON IM.id = CC.instituteId AND CC.boardId = IM.boardId and IM.Stream_Code=@streamid 
+            INNER JOIN MD_Program M 
+                ON M.id = CC.programId AND M.boardId = CC.boardId and M.Stream_Code=@streamid
+            WHERE cc.rollNo = aa.rollNo AND aa.boardId = cc.boardId AND cc.optNo &lt;= 5
             FOR XML PATH('')
         ),
         1,
@@ -81,32 +86,30 @@ END) AS description
 FROM App_Allotment AA
 
 INNER JOIN MD_Quota ST 
-    ON AA.allottedQuota = ST.id
+    ON AA.allottedQuota = ST.id AND AA.boardId = ST.boardId
 
 INNER JOIN MD_SeatCategory cat 
-    ON AA.allottedCat = cat.id
+    ON AA.allottedCat = cat.id AND AA.boardId = cat.boardId
 
 INNER JOIN MD_Institute Institute_Master  
-    ON AA.instituteId = Institute_Master.id and Institute_Master.Stream_Code=@streamid
+    ON AA.instituteId = Institute_Master.id AND AA.boardId = Institute_Master.boardId and Institute_Master.Stream_Code=AA.streamId
 
 INNER JOIN MD_Program Course_Master 
-    ON AA.programId = Course_Master.id and Course_Master.Stream_Code=@streamid
+    ON AA.programId = Course_Master.id AND AA.boardId = Course_Master.boardId AND Course_Master.Stream_Code=AA.streamId
 
 INNER JOIN App_CandidateProfile candidate 
-    ON AA.rollNo = candidate.rollno
+    ON AA.rollNo = candidate.rollno AND AA.boardId = candidate.boardId
 
 INNER JOIN MD_Domicile dom 
-    ON candidate.domicileId = dom.id
+    ON candidate.domicileId = dom.id AND AA.boardId = dom.boardId
 
-INNER JOIN MD_Gender MG ON MG.id = candidate.genderId
+INNER JOIN MD_Gender MG ON MG.id = candidate.genderId AND AA.boardId = MG.boardId
 
 INNER JOIN MD_Category cat_1 
-    ON candidate.categoryId = cat_1.id
+    ON candidate.categoryId = cat_1.id AND AA.boardId = cat_1.boardId
 
 LEFT OUTER JOIN MD_SubCategory SubCategory_Master 
-    ON candidate.subcat = SubCategory_Master.id
-
-
+    ON candidate.subcat = SubCategory_Master.id AND AA.boardId = SubCategory_Master.boardId
 
 WHERE rank &lt;&gt; 0 
   AND aa.roundNo = @csno
@@ -191,10 +194,9 @@ ORDER BY aa.rank</CommandText>
     </DataSet>
     <DataSet Name="DataSet2">
       <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText>
-SELECT id,description 
-FROM MD_Stream</CommandText>
+        <DataSourceName>DataSource1</DataSourceName>
+        <CommandText>SELECT id,description 
+FROM MD_Stream WHERE examTypeId = 53;</CommandText>
       </Query>
       <Fields>
         <Field Name="id">
