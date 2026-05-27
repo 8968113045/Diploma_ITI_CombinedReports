@@ -54,7 +54,9 @@
     <Report Include="AdmissionDetail.rdl" />
     <Report Include="InstituteWiseSeatReport.rdl" />
     <Report Include="ITICutOffRankRpt.rdl" />
-    <Report Include="Psbte_RptITIPivotSeatMatrix.rdl" />
+    <Report Include="Psbte_RptITIPivotSeatMatrix_Central.rdl" />
+    <Report Include="Psbte_RptITIPivotSeatMatrix_Chd.rdl" />
+    <Report Include="Psbte_RptITIPivotSeatMatrix_Punjab.rdl" />
     <Report Include="RptITIPivotSeatMatrix.rdl" />
     <Report Include="RptRankVerificationReport2021.rdl" />
     <Report Include="RptRankVerificationReportPsbte.rdl" />
