@@ -2,7 +2,7 @@
 <RptDataSource xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="DataSourceDiploma">
   <ConnectionProperties>
     <Extension>SQL</Extension>
-    <ConnectString>Data Source=HP\SQLEXPRESS;Initial Catalog=PSBTEDiploma_Main2026_27May;TrustServerCertificate=True</ConnectString>
+    <ConnectString>Data Source=HP\SQLEXPRESS;Initial Catalog=PSBTEDiploma_Main2026;TrustServerCertificate=True</ConnectString>
     <IntegratedSecurity>true</IntegratedSecurity>
   </ConnectionProperties>
   <DataSourceID>ae72fd94-be82-4522-a10c-80aeb2feb1ae</DataSourceID>
