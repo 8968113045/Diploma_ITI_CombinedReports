@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-04T05:29:13.3767660Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-06-05T04:03:09.0656184Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -36,8 +36,7 @@
             <Value>=Parameters!csno.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>
-SELECT  DISTINCT
+        <CommandText>SELECT  DISTINCT
 REPLACE(
     STUFF(
         (
@@ -61,6 +60,7 @@ REPLACE(
     'and'
 ) AS choices,
 candidate.name,
+AP.course,
 AA.ranktypeId,
 AA.rollNo AS roll,
 AA.rank AS ASrank,
@@ -108,6 +108,16 @@ INNER JOIN MD_Gender MG ON MG.id = candidate.genderId AND AA.boardId = MG.boardI
 INNER JOIN MD_Category cat_1 
     ON candidate.categoryId = cat_1.id AND AA.boardId = cat_1.boardId
 
+INNER JOIN App_QualificationMarksDetail AP ON candidate.boardId = AP.boardId
+    AND candidate.rollno = AP.rollNo 
+    AND (
+        (AP.Stream_Code = '60'AND AP.qualificationId IN ('03')) OR
+        (AP.Stream_Code = '87'AND AP.qualificationId IN ('04')) OR
+        (AP.Stream_Code = '85'AND AP.qualificationId IN ('16', '17', '19', '76', '77', '78')) OR
+        (AP.Stream_Code = '89'AND AP.qualificationId IN ('17', '80', '81', '82', '83', '84')) OR
+        (AP.Stream_Code = '88'AND AP.qualificationId IN ('78', '79'))
+    )
+
 LEFT OUTER JOIN MD_SubCategory SubCategory_Master 
     ON candidate.subcat = SubCategory_Master.id AND AA.boardId = SubCategory_Master.boardId
 
@@ -115,7 +125,8 @@ WHERE rank &lt;&gt; 0
   AND aa.roundNo = @csno
   AND aa.streamId = @streamid
 
-ORDER BY aa.rank</CommandText>
+ORDER BY aa.rank
+</CommandText>
       </Query>
       <Fields>
         <Field Name="choices">
@@ -124,6 +135,10 @@ ORDER BY aa.rank</CommandText>
         </Field>
         <Field Name="name">
           <DataField>name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="course">
+          <DataField>course</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="ranktypeId">
@@ -244,6 +259,9 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.34999in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>0.98425in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.86459in</Width>
@@ -632,6 +650,43 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox12">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Candidate School Area</Value>
+                                  <Style>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox12</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>DimGray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#bfcce4</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="textbox6">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -922,7 +977,6 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1075,6 +1129,44 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="course">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!course.Value</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>course</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>DimGray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <rd:Selected>true</rd:Selected>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Sex">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -1201,6 +1293,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1227,7 +1320,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
             <DataSetName>DataSet1</DataSetName>
             <Top>0.99847in</Top>
             <Height>0.83167in</Height>
-            <Width>13.80868in</Width>
+            <Width>14.79292in</Width>
             <Style>
               <FontSize>16pt</FontSize>
               <FontWeight>Bold</FontWeight>
@@ -1281,7 +1374,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Department of Technical Education and Industrial Training</Value>
+                    <Value>Punjab State Board of Technical Education and Industrial Training</Value>
                     <Style>
                       <FontFamily>Tahoma</FontFamily>
                       <FontSize>15pt</FontSize>
@@ -1348,7 +1441,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
         <Height>1.875in</Height>
         <Style />
       </Body>
-      <Width>13.80868in</Width>
+      <Width>14.79292in</Width>
       <Page>
         <PageFooter>
           <Height>0.87312cm</Height>

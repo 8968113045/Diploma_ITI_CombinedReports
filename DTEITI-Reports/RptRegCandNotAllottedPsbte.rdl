@@ -7,9 +7,9 @@
     </am:CreatedBy>
     <am:UpdatedBy>
       <am:Name>SSDTRS</am:Name>
-      <am:Version>18.5.11723.231</am:Version>
+      <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-05-23T13:22:26.5251251Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-06-05T04:03:32.5738041Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -724,7 +724,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Department of Technical Education and Industrial Training</Value>
+                    <Value>Punjab State Board of Technical Education and Industrial Training</Value>
                     <Style>
                       <FontFamily>Tahoma</FontFamily>
                       <FontSize>15pt</FontSize>
