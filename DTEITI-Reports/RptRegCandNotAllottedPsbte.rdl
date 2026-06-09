@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-05T04:03:32.5738041Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-06-08T03:45:41.6076907Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -45,11 +45,12 @@
         STUFF
         (
             (
-                SELECT DISTINCT
-                    ',' + CONVERT(VARCHAR(5), CC.optNo)
-                    + '-' + LTRIM(RTRIM(ISNULL(IM.description, '')))
-                    + '-' + LTRIM(RTRIM(ISNULL(M.description, '')))
-
+                SELECT  
+                ',' + CONVERT(VARCHAR(5), CC.optNo) 
+                + '-' + ISNULL(IM.description, '')
+                + '-' + ISNULL(M.description, '')
+                + ' (' + Case when ISNULL(CC.isValid, 'Y') = 'Y' THEN 'Valid Choice' ELSE 'Invalid Choice' END
+                + ')'
                 FROM App_Choice CC
 
                 INNER JOIN MD_Institute IM
@@ -59,7 +60,7 @@
                     ON M.id = CC.programId AND CC.boardId = M.boardId  and M.Stream_Code=@streamid
 
                 WHERE cc.rollNo = a.rollNo AND a.boardId = cc.boardId
-                  AND cc.optNo &lt;= 5
+                  AND cc.optNo &lt;= 10
 
                 FOR XML PATH('')
             ),

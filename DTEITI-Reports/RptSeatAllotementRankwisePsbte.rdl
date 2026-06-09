@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-05T04:03:09.0656184Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-06-08T03:24:57.0195448Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -41,15 +41,17 @@ REPLACE(
     STUFF(
         (
             SELECT  
-                ',' + CONVERT(VARCHAR(5), CC.optNo) 
-                + '-' + ISNULL(IM.description, '')
-                + '-' + ISNULL(M.description, '')
+    ',' + CONVERT(VARCHAR(5), CC.optNo) 
+    + '-' + ISNULL(IM.description, '')
+    + '-' + ISNULL(M.description, '')
+    + ' (' + Case when ISNULL(CC.isValid, 'Y') = 'Y' THEN 'Valid Choice' ELSE 'Invalid Choice' END
+    + ')'
             FROM App_Choice AS CC
             INNER JOIN MD_Institute IM 
                 ON IM.id = CC.instituteId AND CC.boardId = IM.boardId and IM.Stream_Code=@streamid 
             INNER JOIN MD_Program M 
                 ON M.id = CC.programId AND M.boardId = CC.boardId and M.Stream_Code=@streamid
-            WHERE cc.rollNo = aa.rollNo AND aa.boardId = cc.boardId AND cc.optNo &lt;= 5
+            WHERE cc.rollNo = aa.rollNo AND aa.boardId = cc.boardId AND cc.optNo &lt;= 10
             FOR XML PATH('')
         ),
         1,
@@ -125,8 +127,7 @@ WHERE rank &lt;&gt; 0
   AND aa.roundNo = @csno
   AND aa.streamId = @streamid
 
-ORDER BY aa.rank
-</CommandText>
+ORDER BY aa.rank</CommandText>
       </Query>
       <Fields>
         <Field Name="choices">
@@ -1162,7 +1163,6 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
