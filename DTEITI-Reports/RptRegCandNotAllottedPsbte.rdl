@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-08T03:45:41.6076907Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-06-16T04:51:47.4509737Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -572,11 +572,6 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                       <GroupExpression>=Fields!rollno.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
-                  <SortExpressions>
-                    <SortExpression>
-                      <Value>=Fields!rollno.Value</Value>
-                    </SortExpression>
-                  </SortExpressions>
                   <TablixHeader>
                     <Size>0.55717in</Size>
                     <CellContents>
@@ -613,6 +608,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
+                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <TablixMembers>
