@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-16T04:51:47.4509737Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-06-16T05:27:57.0007920Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -39,7 +39,7 @@
     MD_Category.description AS Categ,
     MG.description AS sex,
     MD_Domicile.description AS state,
-
+    MS.description AS QualExamState,
     REPLACE
     (
         STUFF
@@ -87,6 +87,18 @@ INNER JOIN app_rankdetail Ar
     ON a.rollno = ar.rollno
    AND ar.streamId = @streamid AND a.boardId = Ar.boardId
 
+INNER JOIN App_QualificationMarksDetail AP ON a.boardId = AP.boardId
+    AND a.rollno = AP.rollNo 
+    AND (
+        (AP.Stream_Code = '60'AND AP.qualificationId IN ('03')) OR
+        (AP.Stream_Code = '87'AND AP.qualificationId IN ('04')) OR
+        (AP.Stream_Code = '85'AND AP.qualificationId IN ('16', '17', '19', '76', '77', '78')) OR
+        (AP.Stream_Code = '89'AND AP.qualificationId IN ('17', '80', '81', '82', '83', '84')) OR
+        (AP.Stream_Code = '88'AND AP.qualificationId IN ('78', '79'))
+    )
+INNER JOIN MD_State MS 
+    ON MS.id = AP.qualExamState
+
 WHERE a.rollNo NOT IN
 (
     SELECT rollNo
@@ -130,6 +142,10 @@ ORDER BY ar.rank</CommandText>
         </Field>
         <Field Name="state">
           <DataField>state</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="QualExamState">
+          <DataField>QualExamState</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="choices">
@@ -254,6 +270,21 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                               <TextRuns>
                                 <TextRun>
                                   <Value>State</Value>
+                                  <Style>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Qualification Exam State</Value>
                                   <Style>
                                     <FontFamily>Tahoma</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -399,7 +430,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!name.Value &amp; VbCRLF &amp; Fields!Categ.Value &amp; VbCRLF &amp; Fields!state.Value &amp; VbCRLF &amp; Fields!sex.Value</Value>
+                                  <Value>=Fields!name.Value &amp; VbCRLF &amp; Fields!Categ.Value &amp; VbCRLF &amp; Fields!state.Value &amp; VbCRLF &amp; Fields!QualExamState.Value &amp; VbCRLF &amp; Fields!sex.Value</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
                                     <FontFamily>Tahoma</FontFamily>
@@ -425,6 +456,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -608,7 +640,6 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                           <PaddingBottom>2pt</PaddingBottom>
                         </Style>
                       </Textbox>
-                      <rd:Selected>true</rd:Selected>
                     </CellContents>
                   </TablixHeader>
                   <TablixMembers>
