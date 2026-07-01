@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-05T04:03:49.0767061Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-07-01T08:48:56.6891549Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -33,6 +33,10 @@
             <Value>=Parameters!streamId.Value</Value>
             <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
+          <QueryParameter Name="@roundno">
+            <Value>=Parameters!roundno.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
         </QueryParameters>
         <CommandText>select 
 A.rollno, 
@@ -43,7 +47,7 @@ B.rank as rank,
 e.percentageMarks,
 C.description as Stream
 from App_RankDetail B
-JOIN App_QualificationMarksDetail e on b.rollno = e.rollno and e.boardId = B.boardId and B.streamId = @streamid
+JOIN App_QualificationMarksDetail e on b.rollno = e.rollno and e.boardId = B.boardId and B.streamId = @streamid and B.roundNo = @roundno
 JOIN app_candidateprofile A on A.rollno = b.rollNo and A.boardId = e.boardId
 Join MD_Stream C ON B.streamId = C.id AND B.boardId = C.boardId
 WHERE
@@ -892,6 +896,10 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
     </ReportSection>
   </ReportSections>
   <ReportParameters>
+    <ReportParameter Name="roundno">
+      <DataType>String</DataType>
+      <Prompt>Counselling No.</Prompt>
+    </ReportParameter>
     <ReportParameter Name="streamId">
       <DataType>String</DataType>
       <Prompt>Stream</Prompt>
@@ -910,9 +918,14 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
       <NumberOfRows>1</NumberOfRows>
       <CellDefinitions>
         <CellDefinition>
-          <ColumnIndex>0</ColumnIndex>
+          <ColumnIndex>1</ColumnIndex>
           <RowIndex>0</RowIndex>
           <ParameterName>streamId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>roundno</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
