@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-16T05:27:57.0007920Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-07-02T07:37:08.7153442Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -60,7 +60,7 @@
                     ON M.id = CC.programId AND CC.boardId = M.boardId  and M.Stream_Code=@streamid
 
                 WHERE cc.rollNo = a.rollNo AND a.boardId = cc.boardId
-                  AND cc.optNo &lt;= 10
+                  AND cc.optNo &lt;= 10 AND cc.roundNo = @csno
 
                 FOR XML PATH('')
             ),
@@ -85,7 +85,7 @@ INNER JOIN MD_Domicile
 
 INNER JOIN app_rankdetail Ar
     ON a.rollno = ar.rollno
-   AND ar.streamId = @streamid AND a.boardId = Ar.boardId
+   AND ar.streamId = @streamid AND a.boardId = Ar.boardId AND Ar.roundNo = @csno
 
 INNER JOIN App_QualificationMarksDetail AP ON a.boardId = AP.boardId
     AND a.rollno = AP.rollNo 
@@ -456,7 +456,6 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
