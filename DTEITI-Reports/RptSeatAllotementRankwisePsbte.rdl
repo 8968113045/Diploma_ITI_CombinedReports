@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-07-03T08:06:34.3836693Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-07-13T04:36:08.9959268Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -69,7 +69,7 @@ AA.rollNo AS roll,
 AA.rank AS ASrank,
 AA.isWithdrawn,
 AA.reportingStatus,
-CASE WHEN AA.reportingStatus = 'RU' THEN 
+CASE WHEN AA.reportingStatus IN ('RU', 'RT') THEN 
 REPLACE(
     STUFF(
         (
@@ -294,10 +294,10 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                   <Width>0.98425in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.34999in</Width>
+                  <Width>1.97499in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.98425in</Width>
+                  <Width>1.35925in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.98425in</Width>
@@ -674,6 +674,21 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                                 <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Alloted Seat Description</Value>
+                                  <Style>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>textbox5</rd:DefaultName>
                           <Style>
@@ -699,7 +714,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Previous Alloted Choice if Seat Upgradaed</Value>
+                                  <Value>Previous Alloted Choice if Seat Upgraded / Returned</Value>
                                   <Style>
                                     <FontFamily>Tahoma</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -1215,7 +1230,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Alloted_Cat.Value &amp; VbCRLF &amp; VbCRLF &amp;Fields!subcat.Value &amp; VbCRLF &amp; VbCRLF &amp; fields!SeatGender.Value</Value>
+                                  <Value>=Fields!Alloted_Cat.Value &amp; VbCRLF &amp; VbCRLF &amp;Fields!subcat.Value &amp; VbCRLF &amp; VbCRLF &amp; fields!SeatGender.Value &amp; VbCRLF &amp; VbCRLF &amp; IIF(fields!reportingStatus.Value = "RT", "Previoud Allotment Returned", IIF(fields!reportingStatus.Value = "RU", "Allotment Upgraded", "New Allotment"))</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
                                     <FontFamily>Tahoma</FontFamily>
@@ -1511,7 +1526,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
             <DataSetName>DataSet1</DataSetName>
             <Top>0.99847in</Top>
             <Height>0.83167in</Height>
-            <Width>16.76142in</Width>
+            <Width>17.76142in</Width>
             <Style>
               <FontSize>16pt</FontSize>
               <FontWeight>Bold</FontWeight>
@@ -1632,7 +1647,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
         <Height>1.875in</Height>
         <Style />
       </Body>
-      <Width>16.76142in</Width>
+      <Width>17.76142in</Width>
       <Page>
         <PageFooter>
           <Height>0.87312cm</Height>
