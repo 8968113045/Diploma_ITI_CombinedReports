@@ -9,7 +9,7 @@
       <am:Name>SSDTRS</am:Name>
       <am:Version>17.8.34330.188</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-06-16T05:18:43.3416542Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-07-13T04:36:08.9959268Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -69,6 +69,29 @@ AA.rollNo AS roll,
 AA.rank AS ASrank,
 AA.isWithdrawn,
 AA.reportingStatus,
+CASE WHEN AA.reportingStatus IN ('RU', 'RT') THEN 
+REPLACE(
+    STUFF(
+        (
+            SELECT  TOP 1
+    ',' + CONVERT(VARCHAR(5), CC.optionNo) 
+    + ' - ' + LTRIM(RTRIM(ISNULL(IM.description, '')))
+    + ' - ' + LTRIM(RTRIM(ISNULL(M.description, '')))
+            FROM App_Allotment AS CC
+            INNER JOIN MD_Institute IM 
+                ON IM.id = CC.instituteId AND CC.boardId = IM.boardId and IM.Stream_Code=@streamid 
+            INNER JOIN MD_Program M 
+                ON M.id = CC.programId AND M.boardId = CC.boardId and M.Stream_Code=@streamid
+            WHERE cc.rollNo = aa.rollNo AND aa.boardId = cc.boardId AND roundNo &lt; @csno
+            FOR XML PATH('')
+        ),
+        1,
+        1,
+        ''
+    ),
+    '&amp;amp;',
+    'and'
+) ELSE '' END AS PreviousAllotted,
 AA.optionNo AS Alloted_Choice,
 Course_Master.description AS programId,
 cat.description AS Alloted_Cat,
@@ -164,6 +187,10 @@ ORDER BY aa.rank</CommandText>
         </Field>
         <Field Name="reportingStatus">
           <DataField>reportingStatus</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PreviousAllotted">
+          <DataField>PreviousAllotted</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="Alloted_Choice">
@@ -267,7 +294,10 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                   <Width>0.98425in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.34999in</Width>
+                  <Width>1.97499in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.35925in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.98425in</Width>
@@ -644,8 +674,60 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                                 <TextAlign>Left</TextAlign>
                               </Style>
                             </Paragraph>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Alloted Seat Description</Value>
+                                  <Style>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>textbox5</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>DimGray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#bfcce4</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox20">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Previous Alloted Choice if Seat Upgraded / Returned</Value>
+                                  <Style>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox20</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>DimGray</Color>
@@ -1148,7 +1230,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Alloted_Cat.Value &amp; VbCRLF &amp; VbCRLF &amp;Fields!subcat.Value &amp; VbCRLF &amp; VbCRLF &amp; fields!SeatGender.Value</Value>
+                                  <Value>=Fields!Alloted_Cat.Value &amp; VbCRLF &amp; VbCRLF &amp;Fields!subcat.Value &amp; VbCRLF &amp; VbCRLF &amp; fields!SeatGender.Value &amp; VbCRLF &amp; VbCRLF &amp; IIF(fields!reportingStatus.Value = "RT", "Previoud Allotment Returned", IIF(fields!reportingStatus.Value = "RU", "Allotment Upgraded", "New Allotment"))</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
                                     <FontFamily>Tahoma</FontFamily>
@@ -1163,6 +1245,43 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>RANK</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>DimGray</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="PreviousAllotted">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!PreviousAllotted.Value</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Tahoma</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>PreviousAllotted</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>DimGray</Color>
@@ -1322,7 +1441,6 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -1381,6 +1499,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1407,7 +1526,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
             <DataSetName>DataSet1</DataSetName>
             <Top>0.99847in</Top>
             <Height>0.83167in</Height>
-            <Width>15.77717in</Width>
+            <Width>17.76142in</Width>
             <Style>
               <FontSize>16pt</FontSize>
               <FontWeight>Bold</FontWeight>
@@ -1528,7 +1647,7 @@ FROM MD_Stream WHERE examTypeId = 53;</CommandText>
         <Height>1.875in</Height>
         <Style />
       </Body>
-      <Width>15.77717in</Width>
+      <Width>17.76142in</Width>
       <Page>
         <PageFooter>
           <Height>0.87312cm</Height>
